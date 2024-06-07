@@ -1,3 +1,3 @@
 # Hello :wave:
 
-- [DevOps initialization](./dev-ops-initialization.md)
+- [DevOps initialization](/docs/dev-ops-initialization.md)
