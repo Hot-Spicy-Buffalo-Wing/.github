@@ -8,7 +8,7 @@ Check out our Service [HERE](https://check-out.paperst.ar)
 - [API](https://github.com/Hot-Spicy-Buffalo-Wing/check-out-backend) URL: https://api.check-out.paperst.ar
   - API Docs: https://api.check-out.paperst.ar/api
 - [AI](https://github.com/Hot-Spicy-Buffalo-Wing/check-out-ai) URL: https://ai.check-out.paperst.ar
-  - AI URL: https://ai.check-out.paperst.ar/docs
+  - API Docs: https://ai.check-out.paperst.ar/docs
 - Dashboard URL: https://dashboard.check-out.paperst.ar
   - readonly token[^token]
 - MinIO URL: https://minio.check-out.paperst.ar https://minio-dashboard.check-out.paperst.ar
