@@ -116,5 +116,62 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 
 `settings` -> `repositories` -> `connect repo`
 
+Webhook can boost-up deploy speed
+
+`gitops repository` -> `settings` -> `webhooks`
+URL: `$ARGO_URL/api/webhook`
+content type: application/json
+event: just push event
+
+## 5. Cert Manager
+
+https://cert-manager.io/
+
+From ArgoCD 2.6, it supports multi source application, so we can use helm chart and other resources together in one application
+
+Cert Manager Application File: 
+
+First, Add Cert-Manager Application and apply to create application
+
+```bash
+kubectl apply -f argocd/cert-manager.yaml -n argocd
+```
+
+After create application, ArgoCD traces the changing in gitops repository
+(But when change the application manifest itself, it's required to re-apply manifest file)
+
+### 1. Configuring Issuers
+
+we use CloudFlare for DNS Provider, so it can be used as issuers
+
+issuers.yaml: https://github.com/Hot-Spicy-Buffalo-Wing/check-out-gitops/blob/main/cert-manager/clusterissuer.yaml
+
+#### sealed-secrets
+
+we can store secret file in gitops repository safely
+
+```bash
+helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets
+
+helm install sealed-secrets -n kube-system --set-string fullnameOverride=sealed-secrets-controller sealed-secrets/sealed-secrets
+
+brew install kubeseal  # in macOS
+
+echo "API KEY" | k create secret generic cloudflare-api-token-secret --from-file=api-token=/dev/stdin --dry-run=client --output=yaml > cert-manager/cloudflare-secret.yaml
+
+kubeseal -f cert-manager/cloudflare-secret.yaml -w cert-manager/cloudflare-secret.sealed.yaml
+```
+
+### 2. Issue Certificate
+
+ArgoCD certificate: https://github.com/Hot-Spicy-Buffalo-Wing/check-out-gitops/blob/main/cert-manager/certs/argocd.yaml
+
+in above example, `reflection` (can be installed with helm) is used to change target namespace
+
+```bash
+helm repo add emberstack https://emberstack.github.io/helm-charts
+helm repo update
+helm upgrade --install reflector emberstack/reflector
+```
 
 
