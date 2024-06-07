@@ -96,5 +96,25 @@ kubectl port-forward service/argo-argocd-server -n argocd 8080:443
 #### 2. Setup Ingress (without TLS configuration)
 
 1. set `server.ingress.enabled` true
-  1. set [ssl passthrough](https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/#option-1-ssl-passthrough)
-  2. set [`configs.params."server.insecure"`](https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/#option-2-ssl-termination-at-ingress-controller) true
+    1. set [ssl passthrough](https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/#option-1-ssl-passthrough)
+    2. set [`configs.params."server.insecure"`](https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/#option-2-ssl-termination-at-ingress-controller) true
+2. set `name` and `path` of `server.ingress.extraHosts`
+
+after change `values.yaml`, enter below command
+
+```bash
+helm upgrade argo -n argocd argo/argo-cd -f argocd/values.yaml
+```
+
+to connect, we should know initial credential 
+
+```
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+```
+
+## 4. Init Repository in ArgoCD
+
+`settings` -> `repositories` -> `connect repo`
+
+
+
